@@ -56,7 +56,7 @@ function run(btn_type) {
 
 
 
-      var customer_data = { id: [], arrival_time: [], start_time: [], end_time: [], inq: [], ins: [], out: [], type: [] };
+      var customer_data = { id: [], arrival_time: [], start_time: [], end_time: [], type: [] };
       for (var i = 1; i <= run; i++) {
 
           //顧客購買飲料種類
@@ -153,9 +153,6 @@ function run(btn_type) {
           customer_data.arrival_time.push(arrival_time);
           customer_data.start_time.push(start_time);
           customer_data.end_time.push(servers.end_time[who_service_now]);
-          customer_data.inq.push(0);
-          customer_data.ins.push(0);
-          customer_data.out.push(0);
           customer_data.type.push(drink_type);
 
           var in_queue_str = "";
@@ -190,11 +187,15 @@ function run(btn_type) {
       // console.log('Simulate');
     }
 
-    document.querySelector('.stop').addEventListener('click', () => {
-      clearInterval(tID);
-    });
-
+    var timer;
     var showed_customer_id = 0;
+    var leave_count = 0;
+
+    document.querySelector('.stop').addEventListener('click', () => {
+          clearInterval(tID);
+          clearTimeout(timer);
+          window.stop();
+    });
 
     function showTime() {
         document.getElementById("clock_time").innerHTML = time_str;
@@ -214,7 +215,7 @@ function run(btn_type) {
 
         var timeinqueue = 0;
         var timeinsystem = 0;
-        var list = document.getElementById("inqueue")
+        var list = document.getElementById("inqueue");
 
 
         if (parseInt(customer_data.arrival_time[showed_customer_id]) < temp_count){
@@ -224,39 +225,53 @@ function run(btn_type) {
 
             var object = document.getElementById(showed_customer_id);
 
-            let promise = new Promise(function(resolve, reject) {
-            // 執行非同步的 setTimeout
-            setTimeout(function(){
-              resolve(object.classList.add('toSystem'));
-            }, timeinqueue * speed)});
-            promise.then(function(object) {});
+            // let promise = new Promise(function(resolve, reject) {
+            // // 執行非同步的 setTimeout
+            // setTimeout(function(s){
+            //   resolve(object.classList.add('toSystem'));
+            // }, timeinqueue)});
+            // promise.then(function(object) {});
 
-            let promise2 = new Promise(function(resolve, reject) {
-            // 執行非同步的 setTimeout
-            setTimeout(function(){
-              resolve(object.classList.add('leave'));
-            }, timeinsystem * speed)});
-            promise2.then(function(object) {});
             
+
+            // let promise2 = new Promise(function(resolve, reject) {
+            // // 執行非同步的 setTimeout
+            // setTimeout(function(){
+            //   resolve(object2.classList.add('leave'));
+            // }, timeinsystem)});
+            // promise2.then(function(object2) {leave_count++;});
+
+            var delay = function(s){
+              return new Promise(function(resolve,reject){
+                timer = setTimeout(resolve,s); 
+              });
+            };
+
+            delay().then(function(){
+              return delay(timeinqueue * speed);
+            }).then(function(){
+              object.classList.add('toSystem');   
+              return delay(timeinsystem * speed);
+            }).then(function(){
+              object.classList.add('leave');
+              leave_count++;
+              //console.log(leave_count);
+              
+            });
+ 
             showed_customer_id++;
-        }
 
+            document.getElementById("leave_count").innerHTML = leave_count;
 
-        for (var i = 0; i < run; i++) {
-            if (parseInt(customer_data.arrival_time[i]) < temp_count && customer_data.inq[i] == 0) {
-                customer_data.inq[i] = 1;
-            }
-
-            if (parseInt(customer_data.start_time[i]) < temp_count && customer_data.ins[i] == 0) {
-                customer_data.ins[i] = 1;
-            }
-
-            if (parseInt(customer_data.end_time[i]) < temp_count && customer_data.out[i] == 0) {
-                customer_data.out[i] = 1;
+            if(leave_count >=32 ){
+              document.getElementById("out").innerHTML("Leave");
             }
         }
+
         if (count >= (customer_data.end_time[run - 1] - open_time2) || tmp_simulate_id != simulate_id) {
             clearInterval(tID);
+            clearTimeout(timer);
+            window.stop();
         }
 
         const secondHand = document.querySelector('.second-hand');
@@ -274,6 +289,8 @@ function run(btn_type) {
         var hourDegrees = ((hour / 12) * 360) + ((mins/60)*30) + 90;
         hourHand.style.transform = `rotate(${hourDegrees}deg)`;
     }
+
+
 }
 
 
@@ -297,5 +314,4 @@ function clear() {
     element.innerHTML="Waiting";
     element2.innerHTML="In System";
     element3.innerHTML="Leave";    
-
 }

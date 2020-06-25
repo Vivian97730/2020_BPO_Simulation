@@ -3,7 +3,7 @@ var q_count = 0;
 var s_count = 0;
 var o_count = 0;
 send.addEventListener('click', run, false);
-send.addEventListener('click', clear_count, false);
+send.addEventListener('click', clear, false);
 
 
 var simulate_id = 0;
@@ -29,7 +29,7 @@ function run(btn_type) {
           service_rate2 = parseFloat(service_rate2);
       var total_service_rate1 = 1 / (1 / order_rate + service_rate1);
       var total_service_rate2 = 1 / (1 / order_rate + service_rate2);
-      var speed = document.querySelector('.SS').value;
+      var speed = 1000 - document.querySelector('.SS').value;
           speed = parseFloat(speed);
       var const_servicetime1 = 1 / total_service_rate1 * 60;
       var const_servicetime2 = 1 / total_service_rate2 * 60;
@@ -210,18 +210,34 @@ function run(btn_type) {
         cus_img.src = "girl.png";
         cus_img.setAttribute("width","50px");
         cus_img.setAttribute("id",showed_customer_id);
+        cus_img.setAttribute("class","cus_img");
 
         var timeinqueue = 0;
         var timeinsystem = 0;
+        var list = document.getElementById("inqueue")
 
 
         if (parseInt(customer_data.arrival_time[showed_customer_id]) < temp_count){
             timeinqueue = customer_data.start_time[showed_customer_id] - customer_data.arrival_time[showed_customer_id];
             timeinsystem = customer_data.end_time[showed_customer_id] - customer_data.start_time[showed_customer_id];
-            document.getElementById("inqueue").appendChild(cus_img);
-            // document.getElementById(showed_customer_id).style.transitionDelay = timeinqueue;
-            // document.getElementById(showed_customer_id).style.transitionDuration = timeinsystem;
-            // document.getElementById(showed_customer_id).classList.add('verticalTranslate');
+            list.appendChild(cus_img);
+
+            var object = document.getElementById(showed_customer_id);
+
+            let promise = new Promise(function(resolve, reject) {
+            // 執行非同步的 setTimeout
+            setTimeout(function(){
+              resolve(object.classList.add('toSystem'));
+            }, timeinqueue * speed)});
+            promise.then(function(object) {});
+
+            let promise2 = new Promise(function(resolve, reject) {
+            // 執行非同步的 setTimeout
+            setTimeout(function(){
+              resolve(object.classList.add('leave'));
+            }, timeinsystem * speed)});
+            promise2.then(function(object) {});
+            
             showed_customer_id++;
         }
 
@@ -270,58 +286,16 @@ function randomExponential(rate, randomUniform) {
     return -Math.log(U) / rate;
 }
 
-function clear_count() {
+function clear() {
     q_count = 0;
     s_count = 0;
     o_count = 0;
-}
+    let element = document.getElementById("inqueue");
+    let element2 = document.getElementById("inservice");
+    let element3 = document.getElementById("out");
 
-var addq = document.querySelector('.addq');
-addq.addEventListener('click', run_addq, false);
-function run_addq() {
-    var q_str = '';
-    q_count++;
-    for (var i = 0; i < q_count; i++) {
-        q_str += '<div class="div" style="width:50px;height:50px;float:left" ><img src="girl.png" alt=""width="50px" height="50px"></div>'
-    }
-    document.getElementById("inqueue").innerHTML = q_str;
-}
+    element.innerHTML="Waiting";
+    element2.innerHTML="In System";
+    element3.innerHTML="Leave";    
 
-
-var delqadds = document.querySelector('.delqadds');
-delqadds.addEventListener('click', run_delq, false);
-function run_delq() {
-    var q_str = '';
-    if (q_count > 0) {
-        q_count--;
-    }
-    for (var i = 0; i < q_count; i++) {
-        q_str += '<div class="div" style="width:50px;height:50px;float:left" ><img src="girl.png" alt=""width="50px" height="50px"></div>'
-    }
-    var s_str = '';
-    s_count++;
-    for (var i = 0; i < s_count; i++) {
-        s_str += '<div class="div" style="width:50px;height:50px;float:left" ><img src="girl.png" alt=""width="50px" height="50px"></div>'
-    }
-    document.getElementById("inqueue").innerHTML = q_str;
-    document.getElementById("inservice").innerHTML = s_str;
-}
-
-var dels = document.querySelector('.dels');
-dels.addEventListener('click', run_dels, false);
-function run_dels() {
-    var s_str = '';
-    if (s_count > 0) {
-        s_count--;
-    }
-    for (var i = 0; i < s_count; i++) {
-        s_str += '<div class="div" style="width:50px;height:50px;float:left" ><img src="girl.png" alt=""width="50px" height="50px"></div>'
-    }
-    var o_str = '';
-    o_count++;
-    for (var i = 0; i < o_count; i++) {
-        o_str += '<div class="div" style="width:50px;height:50px;float:left" ><img src="girl.png" alt=""width="50px" height="50px"></div>'
-    }
-    // document.getElementById("out").innerHTML = o_str;
-    document.getElementById("inservice").innerHTML = s_str;
 }

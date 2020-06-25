@@ -355,6 +355,9 @@ table tr:nth-child(even){
   width: 40%;
 }
 
-.verticalTranslate{
-  transform: translate(50px, 100px);
+.toSystem{
+  transform: translate(0px, 200px);
+}
+.leave{
+  transform: translate(0px, 400px);
 }

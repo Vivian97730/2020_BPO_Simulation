@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulator_group3</title>
+    <link rel="stylesheet" type = "text/css" href="css.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div class="shop">
+      <span class="shop_name">BPOOOOOOO TEA</div>
+      <div class="row item_title">
+        <div class="col-9"></div>
+        <div class="col-3" style="margin-top: -18%">
+          <span>OPENING TIME</span>
+          <div class="clock_time" id="clock_time">00:00:00</div>
+          <div class="clock" id="clock">
+            <div class="outer-clock-face">
+              <div class="marking marking-one"></div>
+              <div class="marking marking-two"></div>
+              <div class="marking marking-three"></div>
+              <div class="marking marking-four"></div>
+              <div class="inner-clock-face">
+                <div class="hand hour-hand"></div>
+                <div class="hand min-hand"></div>
+                <div class="hand second-hand"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+      
+    <div class="container">
+      <div class="row">
+        <div class="col-6">
+          <div class="table">
+              <div class="input-group mb-4">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Start hour </span>
+                </div>
+                <input type="time" name="" id=""class="time form-control" value="10:00" placeholder="start time">
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Arrival rate (minute)</span>
+                </div>
+                <input type="text" name="" class="AR form-control" value="1.5" placeholder="arrival time">
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Service rate of ordering (minute)</span>
+                </div>
+                <input type="text" name="" class="OR form-control" value="1.5" placeholder="service rate">
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Probability of typeI (%)</span>
+                </div>
+                <input type="text" name="" class="P1 form-control" value="40" placeholder="Probability">
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Service rate of typeI (minute)</span>
+                </div>
+                <input type="text" name="" class="SR1 form-control" value="1.5" placeholder="service rate">
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Probability of typeII (%)</span>
+                </div>
+                <input type="text" name="" class="P2 form-control" value="60" placeholder="Probability">
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Service rate of typeII (minute)</span>
+                </div>
+                <input type="text" name="" class="SR2 form-control" value="0.67" placeholder="service rate">
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Number of servers</span>
+                </div>
+                <input type="text" name="" class="S form-control" value="2" placeholder="servers">
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Simulation times</span>
+                </div>
+                <input type="text" class="R form-control" value="50" placeholder="simulation time">
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="addon-wrapping">Simulate speed(in ms)</span>
+                </div>
+                <input type="text" class="SS form-control" value="50" placeholder="speed">
+              </div>
+              <input type="button" class="btn send" value="Simulate" onclick="run(this.value)">
+              <input type="button" class="btn stop" value="Stop" onclick="run(this.value)">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="simulate_area" style="">
+            <div id="simulate"></div>
+            <div id="inqueue" style="">Waiting</div>
+            <div id="inservice"style="">In System</div>
+            <div id="out" style="">Leave</div>
+            <div class="clear" style="clear:both"></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class=".table3_1 " id="output"></div>
+    <script src="main.js"></script>
+</body>
+</html>

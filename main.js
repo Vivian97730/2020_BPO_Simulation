@@ -179,7 +179,7 @@ function run(btn_type) {
           str += "<tr><td>" + i + "</td><td>" + drink_type_img + "</td><td>" + queue + "</td><td>" + servicetime + "</td><td>" + arrivalhour + ":" + arrivalmin + ":" + arrivalsec + "</td><td>" + starthour + ":" + startmin + ":" + startsec + "</td><td>" + endhour + ":" + endmin + ":" + endsec + "</td><td>" + servers.name[who_service_now] + "</td></tr>";
       }
       str += "</table>";
-      document.getElementById("output").innerHTML = str;
+      document.getElementById("result").innerHTML = str;
 
 
       simulate_id++;
@@ -194,7 +194,7 @@ function run(btn_type) {
       clearInterval(tID);
     });
 
-
+    var showed_customer_id = 0;
 
     function showTime() {
         document.getElementById("clock_time").innerHTML = time_str;
@@ -206,20 +206,37 @@ function run(btn_type) {
         count++;
         var temp_count = open_time2 + count;
 
+        var cus_img = document.createElement("img");
+        cus_img.src = "girl.png";
+        cus_img.setAttribute("width","50px");
+        cus_img.setAttribute("id",showed_customer_id);
+
+        var timeinqueue = 0;
+        var timeinsystem = 0;
+
+
+        if (parseInt(customer_data.arrival_time[showed_customer_id]) < temp_count){
+            timeinqueue = customer_data.start_time[showed_customer_id] - customer_data.arrival_time[showed_customer_id];
+            timeinsystem = customer_data.end_time[showed_customer_id] - customer_data.start_time[showed_customer_id];
+            document.getElementById("inqueue").appendChild(cus_img);
+            // document.getElementById(showed_customer_id).style.transitionDelay = timeinqueue;
+            // document.getElementById(showed_customer_id).style.transitionDuration = timeinsystem;
+            // document.getElementById(showed_customer_id).classList.add('verticalTranslate');
+            showed_customer_id++;
+        }
+
+
         for (var i = 0; i < run; i++) {
             if (parseInt(customer_data.arrival_time[i]) < temp_count && customer_data.inq[i] == 0) {
                 customer_data.inq[i] = 1;
-                run_addq();
             }
 
             if (parseInt(customer_data.start_time[i]) < temp_count && customer_data.ins[i] == 0) {
                 customer_data.ins[i] = 1;
-                run_delq();
             }
 
             if (parseInt(customer_data.end_time[i]) < temp_count && customer_data.out[i] == 0) {
                 customer_data.out[i] = 1;
-                run_dels();
             }
         }
         if (count >= (customer_data.end_time[run - 1] - open_time2) || tmp_simulate_id != simulate_id) {

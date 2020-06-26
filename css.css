@@ -357,7 +357,11 @@ table tr:nth-child(even){
 
 .toSystem{
   transform: translate(0px, 200px);
+  transition: transform 500ms ease-out;
 }
 .leave{
   transform: translate(0px, 400px);
+  transition: transform 500ms ease-out;
+  opacity: 0; 
+  transition: opacity .25s ease-in-out
 }

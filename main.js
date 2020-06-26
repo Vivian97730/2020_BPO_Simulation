@@ -191,11 +191,7 @@ function run(btn_type) {
     var showed_customer_id = 0;
     var leave_count = 0;
 
-    document.querySelector('.stop').addEventListener('click', () => {
-          clearInterval(tID);
-          clearTimeout(timer);
-          window.stop();
-    });
+    
 
     function showTime() {
         document.getElementById("clock_time").innerHTML = time_str;
@@ -213,9 +209,11 @@ function run(btn_type) {
         cus_img.setAttribute("id",showed_customer_id);
         cus_img.setAttribute("class","cus_img");
 
+
         var timeinqueue = 0;
         var timeinsystem = 0;
         var list = document.getElementById("inqueue");
+        var object;
 
 
         if (parseInt(customer_data.arrival_time[showed_customer_id]) < temp_count){
@@ -223,16 +221,14 @@ function run(btn_type) {
             timeinsystem = customer_data.end_time[showed_customer_id] - customer_data.start_time[showed_customer_id];
             list.appendChild(cus_img);
 
-            var object = document.getElementById(showed_customer_id);
+            object = document.getElementById(showed_customer_id);
 
             // let promise = new Promise(function(resolve, reject) {
             // // 執行非同步的 setTimeout
             // setTimeout(function(s){
             //   resolve(object.classList.add('toSystem'));
-            // }, timeinqueue)});
-            // promise.then(function(object) {});
-
-            
+            // }, timeinqueue * speed)});
+            // promise.then(function(object) {});            
 
             // let promise2 = new Promise(function(resolve, reject) {
             // // 執行非同步的 setTimeout
@@ -250,23 +246,19 @@ function run(btn_type) {
             delay().then(function(){
               return delay(timeinqueue * speed);
             }).then(function(){
-              object.classList.add('toSystem');   
+                object.classList.add('toSystem'); 
+            }).then(function(){ 
               return delay(timeinsystem * speed);
             }).then(function(){
-              object.classList.add('leave');
-              leave_count++;
-              //console.log(leave_count);
-              
+                object.classList.add('leave');
+                leave_count++; 
+                //console.log(timer);
             });
- 
-            showed_customer_id++;
-
-            document.getElementById("leave_count").innerHTML = leave_count;
-
-            if(leave_count >=32 ){
-              document.getElementById("out").innerHTML("Leave");
-            }
+            
+            showed_customer_id++;           
         }
+
+        document.getElementById("leave_count").innerHTML = leave_count;
 
         if (count >= (customer_data.end_time[run - 1] - open_time2) || tmp_simulate_id != simulate_id) {
             clearInterval(tID);
@@ -290,6 +282,12 @@ function run(btn_type) {
         hourHand.style.transform = `rotate(${hourDegrees}deg)`;
     }
 
+    document.querySelector('.stop').addEventListener('click', () => {
+          clearInterval(tID);
+          clearTimeout(timer);
+          window.stop();
+    });
+
 
 }
 
@@ -309,9 +307,7 @@ function clear() {
     o_count = 0;
     let element = document.getElementById("inqueue");
     let element2 = document.getElementById("inservice");
-    let element3 = document.getElementById("out");
 
     element.innerHTML="Waiting";
-    element2.innerHTML="In System";
-    element3.innerHTML="Leave";    
+    element2.innerHTML="In System";   
 }
